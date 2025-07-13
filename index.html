@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Mini Projects</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .projects-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .project-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .buttons, .todo-input-section, .buttons-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    li.done {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .remove-btn {
+      background-color: red;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 3px;
+    }
+
+    @media (min-width: 768px) {
+      .projects-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .project-box {
+        flex: 1 1 45%;
+        max-width: 500px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>All JavaScript Mini Projects</h1>
+  <div class="projects-container">
+
+    <!-- Color Flipper -->
+    <div class="project-box">
+      <h2>Color Flipper</h2>
+      <div class="buttons">
+        <button style="background: green; color: white;" onclick="document.body.style.background='green'">Green</button>
+        <button style="background: red; color: white;" onclick="document.body.style.background='red'">Red</button>
+        <button style="background: blue; color: white;" onclick="document.body.style.background='blue'">Blue</button>
+        <button onclick="document.body.style.background=getRandomColor()">Random</button>
+      </div>
+    </div>
+
+    <!-- Palindrome Checker -->
+    <div class="project-box">
+      <h2>Palindrome Checker</h2>
+      <div class="buttons">
+        <input type="text" id="wordInput" placeholder="Enter word">
+        <button onclick="checkPalindrome()">Check</button>
+      </div>
+    </div>
+
+    <!-- Random Quote Generator -->
+    <div class="project-box">
+      <h2>Random Quote Generator</h2>
+      <div id="quote" style="margin-bottom: 15px; text-align: center; font-style: italic;"></div>
+      <div class="buttons">
+        <button onclick="showQuote()">Generate Quote</button>
+      </div>
+    </div>
+
+    <!-- Stopwatch -->
+    <div class="project-box">
+      <h2>Stopwatch</h2>
+      <h3 id="display">00:00:00</h3>
+      <div class="buttons">
+        <button style="background-color: #4CAF50; color: white;" onclick="startTimer()">Start</button>
+        <button style="background-color: #f39c12; color: white;" onclick="pauseTimer()">Pause</button>
+        <button style="background-color: #e74c3c; color: white;" onclick="resetTimer()">Reset</button>
+      </div>
+    </div>
+
+    <!-- To-Do List -->
+    <div class="project-box">
+      <h2>To-Do List</h2>
+      <div class="todo-input-section">
+        <input type="text" id="taskInput" placeholder="Add a new task">
+        <button style="background-color: #3498db; color: white;" onclick="addTask()">Add</button>
+      </div>
+      <ul id="taskList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // Random Color Generator
+    function getRandomColor() {
+      const hex = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += hex[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    // Palindrome Checker
+    function checkPalindrome() {
+      const word = document.getElementById('wordInput').value.toLowerCase();
+      const reversed = word.split('').reverse().join('');
+      alert(word === reversed ? "It is a palindrome!" : "It is not a palindrome!");
+    }
+
+    // Random Quote Generator
+    const quotes = [
+      "Be yourself; everyone else is already taken. - Oscar Wilde",
+      "Two things are infinite: the universe and human stupidity. - Albert Einstein",
+      "So many books, so little time. - Frank Zappa",
+      "A room without books is like a body without a soul. - Cicero",
+      "Be the change you wish to see in the world. - Gandhi",
+      "Life is what happens when you're busy making other plans. - John Lennon",
+      "In the middle of difficulty lies opportunity. - Albert Einstein"
+    ];
+
+    function showQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      document.getElementById("quote").textContent = quotes[randomIndex];
+    }
+
+    // Stopwatch
+    let [seconds, minutes, hours] = [0, 0, 0];
+    let display = document.getElementById("display");
+    let timer = null;
+
+    function updateDisplay() {
+      display.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (timer !== null) return;
+      timer = setInterval(() => {
+        seconds++;
+        if (seconds === 60) {
+          seconds = 0;
+          minutes++;
+        }
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
+        }
+        updateDisplay();
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      [seconds, minutes, hours] = [0, 0, 0];
+      updateDisplay();
+      timer = null;
+    }
+
+    updateDisplay();
+
+    // To-Do List with LocalStorage
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.textContent = task.text;
+
+        if (task.completed) li.classList.add("done");
+
+        li.addEventListener("click", () => {
+          tasks[index].completed = !tasks[index].completed;
+          saveTasks();
+          renderTasks();
+        });
+
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.className = "remove-btn";
+        removeBtn.onclick = (e) => {
+          e.stopPropagation();
+          tasks.splice(index, 1);
+          saveTasks();
+          renderTasks();
+        };
+
+        li.appendChild(removeBtn);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      if (taskText === "") return;
+
+      tasks.push({ text: taskText, completed: false });
+      saveTasks();
+      renderTasks();
+      taskInput.value = "";
+    }
+
+    renderTasks();
+  </script>
+</body>
+
+</html>
